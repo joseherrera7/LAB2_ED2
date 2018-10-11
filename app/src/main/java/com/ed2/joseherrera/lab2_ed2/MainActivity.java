@@ -127,14 +127,17 @@ public class MainActivity extends AppCompatActivity {
                           } catch (IOException e) {
                             e.printStackTrace();
                         }
-
+                    break;
                     case R.id.navigation_sdes:
                         mTextMessage.setText(R.string.title_dashboard);
                         mTextMessage2.setText("Ingrese su clave");
+                        break;
 
                     case R.id.navigation_rsa:
                         mTextMessage.setText(R.string.title_notifications);
                         mTextMessage2.setText("Ingrese su clave");
+                        break;
+
                         default:
                             try {
                                 if (Integer.valueOf(String.valueOf(key.getText())) > 2) {
@@ -167,18 +170,20 @@ public class MainActivity extends AppCompatActivity {
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
-                        ;
+
+                        break;
                     case R.id.navigation_sdes:
                         mTextMessage.setText(R.string.title_dashboard);
                         mTextMessage2.setText("Ingrese su clave");
-
+                        break;
                     case R.id.navigation_rsa:
                         mTextMessage.setText(R.string.title_notifications);
                         mTextMessage2.setText("Ingrese su clave");
+                        break;
                     default:
                         try {
                             if (Integer.valueOf(String.valueOf(key.getText())) > 2) {
-                                CreateFile(newZigZag.codezigzag(String.valueOf(text.getText()), Integer.valueOf(String.valueOf(key.getText()))));
+                                CreateFile2(newZigZag.decodezigzag(String.valueOf(text.getText()), Integer.valueOf(String.valueOf(key.getText()))));
 
                             }
                             else{
