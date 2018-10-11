@@ -101,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         mTextMessage = (TextView) findViewById(R.id.message);
         mTextMessage2 = (TextView) findViewById(R.id.message2);
         buttonToCode = (Button) findViewById(R.id.btnCifrar);
+        buttonToDecode = (Button) findViewById(R.id.btnDescifrar);
         mTextMessage.setText(R.string.title_home);
         mTextMessage2.setText("Ingrese sus niveles");
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -128,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-        buttonToDecode = (Button) findViewById(R.id.btnDescifrar);
+
         buttonToDecode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == 123 && resultCode == RESULT_OK){
             archivo = data.getData();
 
-            Toast.makeText(this, archivo.toString(), Toast.LENGTH_LONG).show();
+
             Toast.makeText(this, archivo.getPath(), Toast.LENGTH_LONG).show();
             try{
                 entry=readTextFromUri(archivo);
@@ -218,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir ;
         String fname;
-        myDir = new File(root + "/HUFFMAN");
+        myDir = new File(root + "/misCifrados");
         fname = "code.cif";
         myDir.mkdirs();
         File file = new File(myDir, fname);
@@ -232,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
             writer.write(encoded_values);
             writer.flush();
             writer.close();
+            Toast.makeText(this, "Cifrado exitoso su archivo codificado se guardo en"+myDir.getAbsolutePath(), Toast.LENGTH_LONG).show();
         }
         catch (Exception ex)
         {
@@ -242,7 +244,7 @@ public class MainActivity extends AppCompatActivity {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir ;
         String fname;
-        myDir = new File(root + "\\HUFFMAN");
+        myDir = new File(root + "/misCifrados");
         fname = "decode.cif";
         myDir.mkdirs();
         File file = new File(myDir, fname);
@@ -256,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
             writer.write(encoded_values);
             writer.flush();
             writer.close();
+            Toast.makeText(this, "Descifrado exitos su archivo decodificado se guardo en"+myDir.getAbsolutePath(), Toast.LENGTH_LONG).show();
         }
         catch (Exception ex)
         {
