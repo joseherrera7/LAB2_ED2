@@ -1,6 +1,7 @@
 package com.ed2.joseherrera.lab2_ed2;
 
 import android.Manifest.permission;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        final Context context = this;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         buttonSearchArchive = (Button)findViewById(R.id.btnLoadFile);
@@ -113,8 +115,14 @@ public class MainActivity extends AppCompatActivity {
                 switch (id) {
                     case R.id.navigation_zigzag:
                         try {
-                            CreateFile(newZigZag.codezigzag(String.valueOf(text.getText()), Integer.valueOf(String.valueOf(key.getText()))));
-                        } catch (IOException e) {
+                            if (Integer.valueOf(String.valueOf(key.getText())) > 2) {
+                                CreateFile(newZigZag.codezigzag(String.valueOf(text.getText()), Integer.valueOf(String.valueOf(key.getText()))));
+
+                            }
+                            else{
+                                Toast.makeText(context, "Debe ser un numero mayor a 2", Toast.LENGTH_LONG);
+                            }
+                          } catch (IOException e) {
                             e.printStackTrace();
                         }
 
@@ -125,6 +133,19 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.navigation_rsa:
                         mTextMessage.setText(R.string.title_notifications);
                         mTextMessage2.setText("Ingrese su clave");
+                        default:
+                            try {
+                                if (Integer.valueOf(String.valueOf(key.getText())) > 2) {
+                                    CreateFile(newZigZag.codezigzag(String.valueOf(text.getText()), Integer.valueOf(String.valueOf(key.getText()))));
+
+                                }
+                                else{
+                                    Toast.makeText(context, "Debe ser un numero mayor a 2", Toast.LENGTH_LONG);
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                            break;
 
                 }
             }
@@ -136,7 +157,11 @@ public class MainActivity extends AppCompatActivity {
                 switch (id) {
                     case R.id.navigation_zigzag:
                         try {
-                            CreateFile2(newZigZag.decodezigzag(String.valueOf(text.getText()), Integer.valueOf(String.valueOf(key.getText()))));
+                            if (Integer.valueOf(String.valueOf(key.getText())) > 2) {
+                                CreateFile2(newZigZag.decodezigzag(String.valueOf(text.getText()), Integer.valueOf(String.valueOf(key.getText()))));
+                            } else{
+                                Toast.makeText(context, "Debe ser un numero mayor a 2", Toast.LENGTH_LONG);
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -148,6 +173,19 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.navigation_rsa:
                         mTextMessage.setText(R.string.title_notifications);
                         mTextMessage2.setText("Ingrese su clave");
+                    default:
+                        try {
+                            if (Integer.valueOf(String.valueOf(key.getText())) > 2) {
+                                CreateFile(newZigZag.codezigzag(String.valueOf(text.getText()), Integer.valueOf(String.valueOf(key.getText()))));
+
+                            }
+                            else{
+                                Toast.makeText(context, "Debe ser un numero mayor a 2", Toast.LENGTH_LONG);
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        break;
 
                 }
             }
