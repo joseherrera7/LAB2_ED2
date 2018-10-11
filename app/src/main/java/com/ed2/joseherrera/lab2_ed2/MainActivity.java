@@ -19,6 +19,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.URL;
+import java.nio.charset.*;
+
 import com.ed2.joseherrera.lab2_ed2.codifications.zigzag;
 
 import java.io.BufferedReader;
@@ -250,9 +253,10 @@ public class MainActivity extends AppCompatActivity {
 //hola
     private String readTextFromUri(Uri uri) throws IOException {
         String salida="";
+
         InputStream inputStream = getContentResolver().openInputStream(uri);
         String cadena="";
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,UTF8));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,"utf8"),8192);
         while((cadena = reader.readLine())!=null) {
             salida=salida+cadena+"\n";
         }
