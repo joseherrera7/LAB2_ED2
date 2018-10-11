@@ -115,12 +115,14 @@ public class MainActivity extends AppCompatActivity {
                 switch (id) {
                     case R.id.navigation_zigzag:
                         try {
+                            
+
                             if (Integer.valueOf(String.valueOf(key.getText())) > 2) {
                                 CreateFile(newZigZag.codezigzag(String.valueOf(text.getText()), Integer.valueOf(String.valueOf(key.getText()))));
 
                             }
                             else{
-                                Toast.makeText(context, "Debe ser un numero mayor a 2", Toast.LENGTH_LONG);
+                                Toast.makeText(context, "Debe ser un numero mayor o igual a 2", Toast.LENGTH_LONG).show();
                             }
                           } catch (IOException e) {
                             e.printStackTrace();
@@ -140,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 }
                                 else{
-                                    Toast.makeText(context, "Debe ser un numero mayor a 2", Toast.LENGTH_LONG);
+                                    Toast.makeText(context, "Debe ser un numero  mayor o igual a 2", Toast.LENGTH_LONG).show();
                                 }
                             } catch (IOException e) {
                                 e.printStackTrace();
@@ -160,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                             if (Integer.valueOf(String.valueOf(key.getText())) > 2) {
                                 CreateFile2(newZigZag.decodezigzag(String.valueOf(text.getText()), Integer.valueOf(String.valueOf(key.getText()))));
                             } else{
-                                Toast.makeText(context, "Debe ser un numero mayor a 2", Toast.LENGTH_LONG);
+                                Toast.makeText(context, "Debe ser un numero  mayor o igual a 2", Toast.LENGTH_LONG).show();
                             }
                         } catch (IOException e) {
                             e.printStackTrace();
