@@ -250,7 +250,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-//hola
+
     private String readTextFromUri(Uri uri) throws IOException {
         String salida="";
 
