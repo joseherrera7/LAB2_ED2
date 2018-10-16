@@ -22,6 +22,7 @@ import android.widget.Toast;
 import java.net.URL;
 import java.nio.charset.*;
 
+import com.ed2.joseherrera.lab2_ed2.codifications.sdes;
 import com.ed2.joseherrera.lab2_ed2.codifications.zigzag;
 
 import java.io.BufferedReader;
@@ -39,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int SOLICITUD_PERMISO_storage = 1;
     private static Charset UTF8=Charset.forName("UTF-8");
     zigzag newZigZag = new zigzag();
+    sdes newsdes = new sdes();
     private TextView mTextMessage, mTextMessage2;
     private EditText text, key;
     private Button buttonToCode, buttonToDecode, buttonSearchArchive;
@@ -132,8 +134,11 @@ public class MainActivity extends AppCompatActivity {
                         }
                     break;
                     case R.id.navigation_sdes:
-                        mTextMessage.setText(R.string.title_dashboard);
-                        mTextMessage2.setText("Ingrese su clave");
+                        try {
+                            CreateFile(newsdes.CipherSdes(String.valueOf(text.getText()), String.valueOf(key.getText())));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
 
                     case R.id.navigation_rsa:
@@ -176,8 +181,11 @@ public class MainActivity extends AppCompatActivity {
 
                         break;
                     case R.id.navigation_sdes:
-                        mTextMessage.setText(R.string.title_dashboard);
-                        mTextMessage2.setText("Ingrese su clave");
+                        try {
+                            CreateFile2(newsdes.desCipherSdes(String.valueOf(text.getText()), String.valueOf(key.getText())));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
                     case R.id.navigation_rsa:
                         mTextMessage.setText(R.string.title_notifications);
@@ -267,9 +275,25 @@ public class MainActivity extends AppCompatActivity {
     private void CreateFile(String encoded_values) throws IOException {
         String root = Environment.getExternalStorageDirectory().toString();
         File myDir ;
-        String fname;
+        String fname ="";
         myDir = new File(root + "/misCifrados");
-        fname = "code.cif";
+        switch (id) {
+            case R.id.navigation_zigzag:
+
+                fname = "code.cif";
+                break;
+            case R.id.navigation_sdes:
+                fname = "code.scif";
+                break;
+            case R.id.navigation_rsa:
+
+                break;
+            default:
+                fname = "code.rsa";
+                break;
+
+        }
+
         myDir.mkdirs();
         File file = new File(myDir, fname);
         if(file.exists()) {
@@ -294,7 +318,7 @@ public class MainActivity extends AppCompatActivity {
         File myDir ;
         String fname;
         myDir = new File(root + "/misCifrados");
-        fname = "decode.cif";
+        fname = "decode.txt";
         myDir.mkdirs();
         File file = new File(myDir, fname);
         if(file.exists()) {
