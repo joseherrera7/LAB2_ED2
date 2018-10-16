@@ -286,10 +286,10 @@ public class MainActivity extends AppCompatActivity {
                 fname = "code.scif";
                 break;
             case R.id.navigation_rsa:
-
+                fname = "code.rsa";
                 break;
             default:
-                fname = "code.rsa";
+                fname = "code.cif";
                 break;
 
         }
