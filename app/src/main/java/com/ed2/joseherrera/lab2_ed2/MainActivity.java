@@ -19,6 +19,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.nio.charset.*;
 
@@ -34,6 +35,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
+import java.util.Scanner;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -261,14 +263,15 @@ public class MainActivity extends AppCompatActivity {
 
     private String readTextFromUri(Uri uri) throws IOException {
         String salida="";
-
         InputStream inputStream = getContentResolver().openInputStream(uri);
         String cadena="";
-        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,"utf8"),8192);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream,UTF8));
         while((cadena = reader.readLine())!=null) {
             salida=salida+cadena+"\n";
         }
+
         inputStream.close();
+
         reader.close();
         return salida;
     }
@@ -302,7 +305,7 @@ public class MainActivity extends AppCompatActivity {
         try
         {
             FileOutputStream stream = new FileOutputStream(file);
-            OutputStreamWriter writer=new OutputStreamWriter(stream,UTF8);
+            OutputStreamWriter writer=new OutputStreamWriter(stream);
             writer.write(encoded_values);
             writer.flush();
             writer.close();
@@ -327,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
         try
         {
             FileOutputStream stream = new FileOutputStream(file);
-            OutputStreamWriter writer=new OutputStreamWriter(stream,UTF8);
+            OutputStreamWriter writer=new OutputStreamWriter(stream);
             writer.write(encoded_values);
             writer.flush();
             writer.close();

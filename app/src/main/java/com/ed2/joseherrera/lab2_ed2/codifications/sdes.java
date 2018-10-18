@@ -9,6 +9,7 @@ public class sdes {
     String[][] sbox0 = new String[4][4];
     String[][] sbox1 = new String[4][4];
 
+
     public String desCipherSdes(String text, String key){
 
         Character[] charcatersarray = ArrayUtils.toObject(text.toCharArray());
