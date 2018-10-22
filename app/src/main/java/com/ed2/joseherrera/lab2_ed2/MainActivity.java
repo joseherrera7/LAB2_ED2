@@ -19,28 +19,30 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.net.URL;
-import java.nio.charset.*;
-
+import com.ed2.joseherrera.lab2_ed2.codifications.rsa;
 import com.ed2.joseherrera.lab2_ed2.codifications.sdes;
 import com.ed2.joseherrera.lab2_ed2.codifications.zigzag;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Array;
+import java.math.BigInteger;
 import java.nio.charset.Charset;
-import java.nio.file.Files;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final int SOLICITUD_PERMISO_storage = 1;
     private static Charset UTF8=Charset.forName("UTF-8");
     zigzag newZigZag = new zigzag();
-    sdes newsdes = new sdes();
+    sdes newSdes = new sdes();
+
     private TextView mTextMessage, mTextMessage2;
     private EditText text, key;
     private Button buttonToCode, buttonToDecode, buttonSearchArchive;
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.navigation_rsa:
                     mTextMessage.setText(R.string.title_notifications);
-                    mTextMessage2.setText("Ingrese su clave");
+                    mTextMessage2.setText("Ingrese sus numeros p y q, separados por coma");
                     id = item.getItemId();
                     return true;
             }
@@ -135,15 +137,36 @@ public class MainActivity extends AppCompatActivity {
                     break;
                     case R.id.navigation_sdes:
                         try {
-                            CreateFile(newsdes.CipherSdes(String.valueOf(text.getText()), String.valueOf(key.getText())));
+                            CreateFile(newSdes.CipherSdes(String.valueOf(text.getText()), String.valueOf(key.getText())));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
 
                     case R.id.navigation_rsa:
-                        mTextMessage.setText(R.string.title_notifications);
-                        mTextMessage2.setText("Ingrese su clave");
+                        try {
+                            String PQ = String.valueOf(key.getText());
+                            String[]pyq = PQ.split(",");
+                            BigInteger pi = new  BigInteger(pyq[0]);
+                            BigInteger qiu = new BigInteger(pyq[1]);
+
+                            rsa newRsa = new rsa(pi,qiu);
+                            ArrayList<String>  keys = newRsa.generatekeys(pi,qiu);
+                            CreateFile3(keys.get(0));
+                            CreateFile4(keys.get(1));
+                            String textToCipher = String.valueOf(text.getText());
+                            String out ="";
+                            for (char character: textToCipher.toCharArray()
+                                 ) {
+                                String valor = String.valueOf((int)character);
+                                BigInteger number = new BigInteger(valor);
+                                int num = Integer.valueOf(newRsa.Cipher(number));
+                                out += (char)num;
+                            }
+                            CreateFile(out);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                         break;
 
                         default:
@@ -182,14 +205,37 @@ public class MainActivity extends AppCompatActivity {
                         break;
                     case R.id.navigation_sdes:
                         try {
-                            CreateFile2(newsdes.desCipherSdes(String.valueOf(text.getText()), String.valueOf(key.getText())));
+                            CreateFile2(newSdes.desCipherSdes(String.valueOf(text.getText()), String.valueOf(key.getText())));
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
                         break;
                     case R.id.navigation_rsa:
-                        mTextMessage.setText(R.string.title_notifications);
-                        mTextMessage2.setText("Ingrese su clave");
+
+                        try {
+                            String privateKey = readText1().substring(0,readText().length()-1);
+                            String publicKey = readText().substring(0,readText().length()-1);
+                            ArrayList<String> keys = new ArrayList<>();
+                            keys.add(publicKey);
+                            keys.add(privateKey);
+                            BigInteger p = new BigInteger("7");
+                            BigInteger q = new BigInteger("7");
+                            rsa newRsa = new rsa(p,q);
+                            newRsa.setKeys(keys);
+                            String textToDecipher = String.valueOf(text.getText()).substring(0, text.length()-1);
+                            String out ="";
+                            for (char character: textToDecipher.toCharArray()
+                                    ) {
+                                String valor = String.valueOf((int)character);
+                                BigInteger number = new BigInteger(valor);
+                                int wow = Integer.valueOf(newRsa.desCipher(number));
+                                out += (char)(int)
+                            }
+                            CreateFile2(out);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+
                         break;
                     default:
                         try {
@@ -253,12 +299,58 @@ public class MainActivity extends AppCompatActivity {
                     text.setText(entry);
                     route = archivo.getPath();
                 }
+                else if (archivo.getPath().endsWith("rsa")){
+                    text.setText(entry);
+                    route = archivo.getPath();
+                }
+                else if (archivo.getPath().endsWith("sdes")){
+                    text.setText(entry);
+                    route = archivo.getPath();
+                }
             }catch (IOException e){
                 Toast.makeText(this, "Hubo un error al obtener el texto del archivo", Toast.LENGTH_LONG).show();
             }
         }
     }
 
+    private String readText() throws IOException {
+        String salida="";
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir ;
+        String fname;
+        myDir = new File(root + "/misCifrados");
+        fname = "publicKey.txt";
+        myDir.mkdirs();
+        File file = new File(myDir, fname);
+        FileReader fr = new FileReader(file.getAbsoluteFile());
+        String cadena="";
+        BufferedReader reader = new BufferedReader(fr);
+        while((cadena = reader.readLine())!=null) {
+            salida=salida+cadena+"\n";
+        }
+        fr.close();
+        reader.close();
+        return salida;
+    }
+    private String readText1() throws IOException {
+        String salida="";
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir ;
+        String fname;
+        myDir = new File(root + "/misCifrados");
+        fname = "privateKey.txt";
+        myDir.mkdirs();
+        File file = new File(myDir, fname);
+        FileReader fr = new FileReader(file.getAbsoluteFile());
+        String cadena="";
+        BufferedReader reader = new BufferedReader(fr);
+        while((cadena = reader.readLine())!=null) {
+            salida=salida+cadena+"\n";
+        }
+        fr.close();
+        reader.close();
+        return salida;
+    }
     private String readTextFromUri(Uri uri) throws IOException {
         String salida="";
 
@@ -291,9 +383,7 @@ public class MainActivity extends AppCompatActivity {
             default:
                 fname = "code.cif";
                 break;
-
         }
-
         myDir.mkdirs();
         File file = new File(myDir, fname);
         if(file.exists()) {
@@ -319,6 +409,56 @@ public class MainActivity extends AppCompatActivity {
         String fname;
         myDir = new File(root + "/misCifrados");
         fname = "decode.txt";
+        myDir.mkdirs();
+        File file = new File(myDir, fname);
+        if(file.exists()) {
+            file.delete();
+        }
+        try
+        {
+            FileOutputStream stream = new FileOutputStream(file);
+            OutputStreamWriter writer=new OutputStreamWriter(stream,UTF8);
+            writer.write(encoded_values);
+            writer.flush();
+            writer.close();
+            Toast.makeText(this, "Descifrado exitos su archivo decodificado se guardo en"+myDir.getAbsolutePath(), Toast.LENGTH_LONG).show();
+        }
+        catch (Exception ex)
+        {
+            Log.e("Ficheros", "Error al escribir fichero en la memoria interna "+ex.getMessage());
+        }
+    }
+    private void CreateFile3(String encoded_values) throws IOException {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir ;
+        String fname;
+        myDir = new File(root + "/misCifrados");
+        fname = "publicKey.txt";
+        myDir.mkdirs();
+        File file = new File(myDir, fname);
+        if(file.exists()) {
+            file.delete();
+        }
+        try
+        {
+            FileOutputStream stream = new FileOutputStream(file);
+            OutputStreamWriter writer=new OutputStreamWriter(stream,UTF8);
+            writer.write(encoded_values);
+            writer.flush();
+            writer.close();
+            Toast.makeText(this, "Descifrado exitos su archivo decodificado se guardo en"+myDir.getAbsolutePath(), Toast.LENGTH_LONG).show();
+        }
+        catch (Exception ex)
+        {
+            Log.e("Ficheros", "Error al escribir fichero en la memoria interna "+ex.getMessage());
+        }
+    }
+    private void CreateFile4(String encoded_values) throws IOException {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir ;
+        String fname;
+        myDir = new File(root + "/misCifrados");
+        fname = "privateKey.txt";
         myDir.mkdirs();
         File file = new File(myDir, fname);
         if(file.exists()) {

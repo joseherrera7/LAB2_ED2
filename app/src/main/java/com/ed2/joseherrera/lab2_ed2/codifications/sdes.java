@@ -122,7 +122,6 @@ public class sdes {
         sbox1[3][1] = "01";
         sbox1[3][2] = "00";
         sbox1[3][3] = "11";
-
     }
 
     public String Leftshift1(String binary) {
@@ -153,24 +152,19 @@ public class sdes {
         char temp1;
         char temp2;
         string = binary.toCharArray();
-
         temp1 = binary.charAt(0);
         temp2 = binary.charAt(1);
-
         string[0] = string[2];
         string[1] = string[3];
         string[2] = string[4];
         string[3] = temp1;
         string[4] = temp2;
-
         stringwithshift += string[0];
         stringwithshift += string[1];
         stringwithshift += string[2];
         stringwithshift += string[3];
         stringwithshift += string[4];
-
         return stringwithshift;
-
     }
 
     public String permutate8(String key){
@@ -185,7 +179,6 @@ public class sdes {
         newCharacters.add(characterArray[3]);
         newCharacters.add(characterArray[6]);
         newCharacters.add(characterArray[0]);
-
         for (Character character:  newCharacters
                 ) {
             strings+=character;
