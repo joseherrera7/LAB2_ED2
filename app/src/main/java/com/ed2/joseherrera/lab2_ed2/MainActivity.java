@@ -229,7 +229,7 @@ public class MainActivity extends AppCompatActivity {
                                 String valor = String.valueOf((int)character);
                                 BigInteger number = new BigInteger(valor);
                                 int wow = Integer.valueOf(newRsa.desCipher(number));
-                                out += (char)(int)
+                                out += (char)wow;
                             }
                             CreateFile2(out);
                         } catch (IOException e) {
